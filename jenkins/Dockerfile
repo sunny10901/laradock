@@ -28,7 +28,9 @@ RUN mkdir -p /usr/share/jenkins/ref/init.groovy.d
 ENV TINI_VERSION 0.16.1
 ENV TINI_SHA d1cb5d71adc01d47e302ea439d70c79bd0864288
 
-# Use tini as subreaper in Docker container to adopt zombie processes 
+# Use tini as subreaper in Docker container to adopt zombie processes
+
+RUN echo https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini-static-amd64
 RUN curl -fsSL https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini-static-amd64 -o /bin/tini && chmod +x /bin/tini \
   && echo "$TINI_SHA  /bin/tini" | sha1sum -c -
 
