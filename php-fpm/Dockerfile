@@ -388,6 +388,7 @@ RUN if [ ${INSTALL_IMAP} = true ]; then \
     docker-php-ext-install imap \
 ;fi
 
+
 ###########################################################################
 # Check PHP version:
 ###########################################################################
@@ -405,7 +406,55 @@ RUN php -v | head -n 1 | grep -q "PHP ${PHP_VERSION}."
 COPY ./laravel.ini /usr/local/etc/php/conf.d
 COPY ./xlaravel.pool.conf /usr/local/etc/php-fpm.d/
 
+ARG PHP_VERSION_INI=${PHP_VERSION_INI}
+
+COPY ./php${PHP_VERSION_INI}.ini  /usr/local/etc/php/php.ini
+
 USER root
+
+# Setting HugePages number
+
+#RUN sysctl vm.nr_hugepages=512
+
+RUN cat /proc/meminfo | grep Huge*
+
+
+###########################################################################
+# install tideways_xhprof Extensions
+# PHP_FPM_INSTALL_TIDEWAYS_XHPROF:
+###########################################################################
+
+#ARG PHP_FPM_INSTALL_TIDEWAYS_XHPROF=false
+
+COPY ./${PHP_FPM_INSTALL_TIDWAYS_XHPROF_ZIP} /tmp/php-xhprof-extension.zip
+
+RUN if [ ${PHP_FPM_INSTALL_TIDEWAYS_XHPROF} = true ]; then \
+   
+    apt-get -y install sudo wget unzip \
+
+    && mkdir -p /usr/local/tideways-xhprof \
+    && unzip 
+    # && tar -C /usr/local/tideways-xhprof -zxvf /tmp/php-xhprof-extension.tar.gz --strip 1 \
+    && ( \
+        cd /usr/local/tideways-xhprof \
+        && phpize \
+        && cd /tmp/xhprof \
+        && phpize ./configure --with-php-config=php-config \
+        && make clean && make && make test && sudo make install 
+    ) \
+    && rm /tmp/aerospike-client-php.tar.gz \
+    && docker-php-ext-enable aerospike \
+
+
+    # apt-get -y install sudo wget \
+    #    && mkdir -p /usr/local/tideways-xhprof \
+    #    && echo "yes" | git clone https://github.com/yaoguais/phpng-xhprof.git /tmp/xhprof \
+    #    && cd /tmp/xhprof \
+    #    && phpize ./configure --with-php-config=php-config \
+    #    && make clean && make && make test && sudo make install 
+;fi
+
+
 
 # Clean up
 RUN apt-get clean && \
