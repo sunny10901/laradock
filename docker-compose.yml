@@ -150,10 +150,10 @@ services:
         - "9000"
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
-        - "${PHP_FPM_CAR_HOST}:172.20.0.1"
-        - "${PHP_FPM_USER_HOST}:172.20.0.1"
-        - "${PHP_FPM_BACKEND_HOST}:172.20.0.1"
-        - "${PHP_FPM_JINDIAN_HOST}:172.20.0.1"
+        - "${PHP_FPM_CAR_HOST}:${DOCKER_NET_GETWAY}"
+        - "${PHP_FPM_USER_HOST}:${DOCKER_NET_GETWAY}"
+        - "${PHP_FPM_BACKEND_HOST}:${DOCKER_NET_GETWAY}"
+        - "${PHP_FPM_JINDIAN_HOST}:${DOCKER_NET_GETWAY}1"
 
       environment:
         - PHP_IDE_CONFIG=${PHP_IDE_CONFIG}
