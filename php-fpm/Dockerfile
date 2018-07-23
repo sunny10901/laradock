@@ -511,20 +511,20 @@ COPY ./${PHP_FPM_INSTALL_TIDWAYS_XHPROF_ZIP} /tmp/php-xhprof-extension.zip
 
 RUN if [ ${PHP_FPM_INSTALL_TIDEWAYS_XHPROF} = true ]; then \
    
-    apt-get -y install sudo wget unzip \
+    apt-get -y install sudo unzip \
 
-    && mkdir -p /usr/local/tideways-xhprof \
-    && unzip 
+    && mkdir -p tideways-xhprof \
+    && unzip -d tideways-xhprof /tmp/php-xhprof-extension.zip \
+
     # && tar -C /usr/local/tideways-xhprof -zxvf /tmp/php-xhprof-extension.tar.gz --strip 1 \
     && ( \
-        cd /usr/local/tideways-xhprof \
+        cd tideways-xhprof \
         && phpize \
-        && cd /tmp/xhprof \
-        && phpize ./configure --with-php-config=php-config \
-        && make clean && make && make test && sudo make install 
+        && ./configure --with-php-config=php-config \
+        && make clean && make && make test && sudo make install \
     ) \
-    && rm /tmp/aerospike-client-php.tar.gz \
-    && docker-php-ext-enable aerospike \
+    && rm /tmp/php-xhprof-extension.zip \
+    && docker-php-ext-enable tideways-xhprof \
 
 
     # apt-get -y install sudo wget \
