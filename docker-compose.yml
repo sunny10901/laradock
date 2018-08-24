@@ -159,6 +159,7 @@ services:
         - "${PHP_FPM_USER_HOST}:172.20.0.1"
         - "${PHP_FPM_BACKEND_HOST}:172.20.0.1"
         - "${PHP_FPM_JINDIAN_HOST}:172.20.0.1"
+        - "${PHP_FPM_NOTICE_HOST}:172.20.0.1"
 
       environment:
         - PHP_IDE_CONFIG=${PHP_IDE_CONFIG}
