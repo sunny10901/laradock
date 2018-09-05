@@ -49,19 +49,6 @@ RUN apt-get update -yqq && \
 #
 
 ###########################################################################
-# SOAP:
-###########################################################################
-
-ARG INSTALL_SOAP=false
-
-RUN if [ ${INSTALL_SOAP} = true ]; then \
-    # Install the soap extension
-    rm /etc/apt/preferences.d/no-debian-php && \
-    apt-get -y install libxml2-dev php-soap && \
-    docker-php-ext-install soap \
-;fi
-
-###########################################################################
 # pgsql
 ###########################################################################
 
@@ -497,8 +484,20 @@ USER root
 
 #RUN sysctl vm.nr_hugepages=512
 
-RUN cat /proc/meminfo | grep Huge*
+#RUN cat /proc/meminfo | grep Huge*
 
+###########################################################################
+# SOAP:
+###########################################################################
+
+ARG INSTALL_SOAP=false
+
+RUN if [ ${INSTALL_SOAP} = true ]; then \
+    # Install the soap extension
+    rm /etc/apt/preferences.d/no-debian-php && \
+    apt-get -y install libxml2-dev php-soap && \
+    docker-php-ext-install soap \
+;fi
 
 ###########################################################################
 # install tideways_xhprof Extensions
@@ -510,32 +509,32 @@ ARG PHP_FPM_INSTALL_TIDWAYS_XHPROF_ZIP=php-xhprof-extension-master.zip
 
 COPY ./${PHP_FPM_INSTALL_TIDWAYS_XHPROF_ZIP} /tmp/php-xhprof-extension.zip
 
-RUN ls /tmp/ -la
-
-RUN if [ ${PHP_FPM_INSTALL_TIDEWAYS_XHPROF} = true ]; then \
-   
-    apt-get -y install sudo unzip \
-
-    && mkdir -p tideways-xhprof \
-    && pwd && unzip -d tideways-xhprof  /tmp/php-xhprof-extension.zip \
-    # && tar -C /usr/local/tideways-xhprof -zxvf /tmp/php-xhprof-extension.tar.gz --strip 1 \
-    && ( \
-        cd tideways-xhprof \
-        && phpize \
-        && ./configure --with-php-config=php-config \
-        && make clean && make && sudo make install \
-    ) \
-    && docker-php-ext-enable tideways_xhprof \
-    && rm /tmp/php-xhprof-extension.zip \
-
-
-#     apt-get -y install sudo wget \
-#        && mkdir -p /usr/local/tideways-xhprof \
-#        && echo "yes" | git clone https://github.com/yaoguais/phpng-xhprof.git /tmp/xhprof \
-#        && cd /tmp/xhprof \
-#        && phpize ./configure --with-php-config=php-config \
-#        && make clean && make && make test && sudo make install
-;fi
+#RUN ls /tmp/ -la
+#
+#RUN if [ ${PHP_FPM_INSTALL_TIDEWAYS_XHPROF} = true ]; then \
+#
+#    apt-get -y install sudo unzip \
+#
+#    && mkdir -p tideways-xhprof \
+#    && pwd && unzip -d tideways-xhprof  /tmp/php-xhprof-extension.zip \
+#    # && tar -C /usr/local/tideways-xhprof -zxvf /tmp/php-xhprof-extension.tar.gz --strip 1 \
+#    && ( \
+#        cd tideways-xhprof \
+#        && phpize \
+#        && ./configure --with-php-config=php-config \
+#        && make clean && make && sudo make install \
+#    ) \
+#    && docker-php-ext-enable tideways_xhprof \
+#    && rm /tmp/php-xhprof-extension.zip \
+#
+#
+##     apt-get -y install sudo wget \
+##        && mkdir -p /usr/local/tideways-xhprof \
+##        && echo "yes" | git clone https://github.com/yaoguais/phpng-xhprof.git /tmp/xhprof \
+##        && cd /tmp/xhprof \
+##        && phpize ./configure --with-php-config=php-config \
+##        && make clean && make && make test && sudo make install
+#;fi
 
 
 
