@@ -91,11 +91,22 @@ USER ${user}
 
 COPY jenkins-support /usr/local/bin/jenkins-support
 COPY jenkins.sh /usr/local/bin/jenkins.sh
-ENTRYPOINT ["/bin/tini", "--", "/usr/local/bin/jenkins.sh"]
+
+COPY entrypoint.sh /entrypoint.sh
+#RUN /bin/tini -- /usr/local/bin/jenkins.sh
+#RUN touch "${COPY_REFERENCE_FILE_LOG}"
+#RUN echo ${COPY_REFERENCE_FILE_LOG}
+#RUN echo "Can not write to ${COPY_REFERENCE_FILE_LOG}. Wrong volume permissions?"
+#RUN    echo "--- Copying files at $(date)" >> "$COPY_REFERENCE_FILE_LOG"
+#ENTRYPOINT ["/entrypoint.sh"]
+
+#ENTRYPOINT ["/bin/tini"," --","/usr/local/bin/jenkins.sh"]
 
 # from a derived Dockerfile, can use `RUN plugins.sh active.txt` to setup /usr/share/jenkins/ref/plugins from a support bundle
 COPY plugins.sh /usr/local/bin/plugins.sh
 COPY install-plugins.sh /usr/local/bin/install-plugins.sh
+
+
 
 # Only need below if we are starting from empty jenkins_home
 ## Copy the RSA keys
