@@ -1342,6 +1342,7 @@ services:
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
       ports:
         - "5920:5920"
+        - "5921:5921"
       links:
         - mysql
       networks:
@@ -1353,17 +1354,17 @@ services:
       build:
         context: ./etcd
       ports:
-      - "${ETCD_PORT}:2379"
-      - "4001:4001"
-      - "2380:2380"
+        - "${ETCD_PORT}:2379"
+        - "4001:4001"
+        - "2380:2380"
       volumes:
-      - ${DATA_PATH_HOST}/etcd:/data/etcd-data
-      - etcd:/data/etcd-data
+        - ${DATA_PATH_HOST}/etcd:/data/etcd-data
+        - etcd:/data/etcd-data
       networks:
-      - backend
+        - backend
       environment:
-      - TZ=CST-8
-      - LANG=zh_CN.UTF-8
+        - TZ=CST-8
+        - LANG=zh_CN.UTF-8
 #      command:
 #        /usr/local/bin/etcd
 #        -name etcd0
@@ -1395,3 +1396,25 @@ services:
       networks:
         - frontend
         - backend
+### swoft  #########################################
+    swoft:
+      #image: swoft/swoft:latest
+      build:
+        context: ./swoft
+      volumes:
+        - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
+#      stdin_open: true
+#      tty: true
+#      privileged: true
+      ports:
+      - "8099:8099"
+      - "8088:8088"
+      expose:
+        - "8088"
+        - "8099"
+      extra_hosts:
+        - "dockerhost:${DOCKER_HOST_IP}"
+      networks:
+        - frontend
+        - backend
+      #entrypoint: ["php", "/var/www/swoft/bin/swoft", "start"]
