@@ -45,6 +45,60 @@ volumes:
 
 services:
 
+### consul testing ##################################
+    consul1:
+      image: consul
+      container_name: consul1
+      restart: always
+      network_mode: mynet
+      command: agent -server -client=0.0.0.0 -bootstrap-expect=3 -node=consul1
+    consul2:
+      image: consul:latest
+      container_name: consul2
+      network_mode: mynet
+      restart: always
+      command: agent -server -client=0.0.0.0 -retry-join=consul1 -node=consul2
+    consul3:
+      image: consul:latest
+      container_name: consul3
+      network_mode: mynet
+      restart: always
+      command: agent -server -client=0.0.0.0 -retry-join=consul1 -node=consul3
+    consul4:
+      image: consul:latest
+      container_name: consul4
+      network_mode: mynet
+      restart: always
+      ports:
+        - 8500:8500
+      command: agent -client=0.0.0.0 -retry-join=consul1 -ui -node=client1
+    consul5:
+      image: consul:latest
+      container_name: consul5
+      network_mode: mynet
+      restart: always
+      command: agent -server -client=0.0.0.0 -bootstrap-expect=3 -node=consul5 -datacenter=dc2
+    consul6:
+      image: consul:latest
+      container_name: consul6
+      network_mode: mynet
+      restart: always
+      command: agent -server -client=0.0.0.0 -retry-join=consul5 -node=consul6 -datacenter=dc2
+    consul7:
+      image: consul:latest
+      container_name: consul7
+      network_mode: mynet
+      restart: always
+      command: agent -server -client=0.0.0.0 -retry-join=consul5 -node=consul7 -datacenter=dc2
+    consul8:
+      image: consul:latest
+      container_name: consul8
+      network_mode: mynet
+      restart: always
+      ports:
+        - 8501:8500
+      command: agent -client=0.0.0.0 -retry-join=consul5 -ui -node=client2
+
 ### Workspace Utilities ##################################
     workspace:
       build:
@@ -180,6 +234,7 @@ services:
         - "${PHP_FPM_JINDIAN_HOST}:172.20.0.1"
         - "${PHP_FPM_NOTICE_HOST}:172.20.0.1"
         - "${PHP_FPM_NOTIFY_HOST}:172.20.0.1"
+        - "${PHP_FPM_SCM_HOST}:172.20.0.1"
 
       environment:
         - PHP_IDE_CONFIG=${PHP_IDE_CONFIG}
