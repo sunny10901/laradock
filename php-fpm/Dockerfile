@@ -22,6 +22,15 @@ LABEL maintainer="Mahmoud Zalt <mahmoud@zalt.me>"
 ENV DEBIAN_FRONTEND noninteractive
 
 # always run apt update when start and after add new source list, then clean up at end.
+
+### 替换为阿里的镜像 ###   --begin
+COPY ./sources.list.aliyun /etc/apt/sources.list
+RUN rm -rf /var/lib/apt/lists/* && \
+    apt-get clean && \
+    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 40976EAF437D05B5 && \
+    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3B4FE6ACC0B21F32
+### 替换为阿里的镜像 ###   --end
+
 RUN apt-get update -yqq && \
     apt-get install -y apt-utils && \
     pecl channel-update pecl.php.net
