@@ -411,7 +411,9 @@ RUN if [ ${INSTALL_GHOSTSCRIPT} = true ]; then \
 ARG INSTALL_LDAP=false
 
 RUN if [ ${INSTALL_LDAP} = true ]; then \
-    apt-get install -y libldap2-dev && \
+    apt-get update && \
+    apt-get install libldap2-dev -y && \
+#    apt-get install -y libldap2-dev && \
     docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ && \
     docker-php-ext-install ldap \
 ;fi
