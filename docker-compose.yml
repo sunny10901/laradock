@@ -180,6 +180,8 @@ services:
         - "${PHP_FPM_SCM_HOST}:172.20.0.1"
         - "${PHP_FPM_FS_HOST}:172.20.0.1"
         - "${PHP_FPM_KF_HOST}:172.20.0.1"
+        - "${PHP_FPM_MACHINE_HOST}:172.20.0.1"
+        - "${PHP_FPM_WASH_CAR_HOST}:172.20.0.1"
 
       environment:
         - PHP_IDE_CONFIG=${PHP_IDE_CONFIG}
