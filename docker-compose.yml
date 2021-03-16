@@ -253,6 +253,7 @@ services:
         - php-fpm
         - mysql
         - rabbitmq
+        - redis
       networks:
         - frontend
         - backend
