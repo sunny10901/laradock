@@ -251,7 +251,8 @@ services:
       depends_on:
 ### 启动依赖
         - php-fpm
-        - mysql
+#        - mysql
+        - mariadb
         - rabbitmq
         - redis
       networks:
